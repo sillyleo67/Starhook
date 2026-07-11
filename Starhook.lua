@@ -11,18 +11,18 @@ local ThreadSource = [[
     end
 ]]
 
-local function RunSource(Runner, GetAll)
-    for _, Actor in ipairs(GetAll()) do
-        Runner(Actor, ThreadSource)
-    end
-end
-
 if string.find(Executor, "wave") or string.find(Executor, "choco") then
-    RunSource(run_on_actor, get_deleted_actors)
+    for _, Actor in ipairs(get_deleted_actors()) do
+        run_on_actor(Actor, ThreadSource)
+    end
 elseif string.find(Executor, "volt") or string.find(Executor, "synapse") then
-    RunSource(run_on_actor, getactors)
+    for _, Actor in ipairs(getactors()) do
+        run_on_actor(Actor, ThreadSource)
+    end
 elseif string.find(Executor, "potassium") then
-    RunSource(run_on_thread, getactorthreads)
+    for _, Actor in ipairs(getactorthreads()) do
+        run_on_thread(Actor, ThreadSource)
+    end
 elseif getfflag and string.lower(tostring(getfflag("DebugRunParallelLuaOnMainThread"))) == "true" then
     loadstring(Source)()
 elseif setfflag then
