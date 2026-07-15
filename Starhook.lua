@@ -28,9 +28,14 @@ elseif getfflag and string.lower(tostring(getfflag("DebugRunParallelLuaOnMainThr
 elseif setfflag then
     setfflag("DebugRunParallelLuaOnMainThread", "True")
 
-    if queue_on_teleport then
-        queue_on_teleport(Source)
-    end
+        if queue_on_teleport then
+            queue_on_teleport([=[
+                repeat task.wait() until game:IsLoaded()
 
-    game:GetService("TeleportService"):Teleport(game.PlaceId)
+                task.wait(2)
+            ]=] .. Source)
+        end
+
+        game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
+    end
 end
