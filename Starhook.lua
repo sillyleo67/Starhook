@@ -1,27 +1,38 @@
-local Source = [[getgenv().SCRIPT_KEY = "KEYLESS"; loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/680cb3160eb57826849c357d82cb511a6986ec128fa0c3abdec457870c918cac/download"))()]]
-
 local Executor = string.lower(identifyexecutor and identifyexecutor() or "")
+local Source = [[getgenv().SCRIPT_KEY = "KEYLESS"; loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/680cb3160eb57826849c357d82cb511a6986ec128fa0c3abdec457870c918cac/download"))()]]
+local ThreadSource = [[local Shared = getrenv().shared if Shared and Shared.require then ]] .. Source .. [[ end]]
 
-local ThreadSource = [[
-    local Shared = getrenv().shared
-
-    if Shared and Shared.require then
-        ]] .. Source .. [[
-
+local function JoinServer()
+    local Http = game:GetService("HttpService")
+    local Teleport = game:GetService("TeleportService")
+    local Players = game:GetService("Players")
+    
+    local Url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?limit=100"
+    local Success, Response = pcall(function() 
+        return Http:JSONDecode(game:HttpGet(Url)) 
+    end)
+    
+    if Success and Response and Response.data then
+        for _, Server in ipairs(Response.data) do
+            if Server.id ~= game.JobId and Server.playing < Server.maxPlayers then
+                Teleport:TeleportToPlaceInstance(game.PlaceId, Server.id, Players.LocalPlayer)
+                break
+            end
+        end
     end
-]]
+end
 
 if string.find(Executor, "wave") or string.find(Executor, "choco") then
-    for _, Actor in ipairs(get_deleted_actors()) do
-        run_on_actor(Actor, ThreadSource)
+    for _, Actor in ipairs(get_deleted_actors()) do 
+        run_on_actor(Actor, ThreadSource) 
     end
-elseif string.find(Executor, "volt") or string.find(Executor, "synapse") then
-    for _, Actor in ipairs(getactors()) do
-        run_on_actor(Actor, ThreadSource)
+elseif string.find(Executor, "volt") or string.find(Executor, "synapse") or string.find(Executor, "madium") then
+    for _, Actor in ipairs(getactors()) do 
+        run_on_actor(Actor, ThreadSource) 
     end
 elseif string.find(Executor, "potassium") then
-    for _, Actor in ipairs(getactorthreads()) do
-        run_on_thread(Actor, ThreadSource)
+    for _, Actor in ipairs(getactorthreads()) do 
+        run_on_thread(Actor, ThreadSource) 
     end
 elseif getfflag and string.lower(tostring(getfflag("DebugRunParallelLuaOnMainThread"))) == "true" then
     loadstring(Source)()
@@ -36,5 +47,5 @@ elseif setfflag then
         ]=] .. Source)
     end
 
-    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
+    JoinServer()
 end
