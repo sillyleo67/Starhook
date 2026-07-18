@@ -7,14 +7,15 @@ local function JoinServer()
     local Teleport = game:GetService("TeleportService")
     local Players = game:GetService("Players")
     
-    local Url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?limit=100"
+    local Url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?limit=100&excludeFullGames=true"
+    
     local Success, Response = pcall(function() 
         return Http:JSONDecode(game:HttpGet(Url)) 
     end)
     
     if Success and Response and Response.data then
         for _, Server in ipairs(Response.data) do
-            if Server.id ~= game.JobId and Server.playing < Server.maxPlayers then
+            if Server.id ~= game.JobId then
                 Teleport:TeleportToPlaceInstance(game.PlaceId, Server.id, Players.LocalPlayer)
                 break
             end
@@ -27,7 +28,7 @@ if string.find(Executor, "wave") or string.find(Executor, "choco") then
         run_on_actor(Actor, ThreadSource) 
     end
 
-elseif string.find(Executor, "volt") or string.find(Executor, "synapse") then
+elseif string.find(Executor, "vo2lt") or string.find(Executor, "synapse") then
     for _, Actor in ipairs(getactors()) do 
         run_on_actor(Actor, ThreadSource) 
     end
