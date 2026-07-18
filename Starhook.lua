@@ -8,14 +8,13 @@ local function JoinServer()
     local Players = game:GetService("Players")
     
     local Url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?limit=100&excludeFullGames=true"
-    
     local Success, Response = pcall(function() 
         return Http:JSONDecode(game:HttpGet(Url)) 
     end)
     
     if Success and Response and Response.data then
         for _, Server in ipairs(Response.data) do
-            if Server.id ~= game.JobId then
+            if Server.id ~= game.JobId and (Server.maxPlayers - Server.playing) >= 4 then
                 Teleport:TeleportToPlaceInstance(game.PlaceId, Server.id, Players.LocalPlayer)
                 break
             end
@@ -27,7 +26,7 @@ if string.find(Executor, "wave") or string.find(Executor, "choco") then
     for _, Actor in ipairs(get_deleted_actors()) do 
         run_on_actor(Actor, ThreadSource) 
     end
-elseif string.find(Executor, "vo2lt") or string.find(Executor, "synapse") then
+elseif string.find(Executor, "v2olt") or string.find(Executor, "synapse") then
     for _, Actor in ipairs(getactors()) do 
         run_on_actor(Actor, ThreadSource) 
     end
@@ -39,6 +38,20 @@ elseif getfflag and string.lower(tostring(getfflag("DebugRunParallelLuaOnMainThr
     loadstring(Source)()
 elseif setfflag then
     setfflag("DebugRunParallelLuaOnMainThread", "True")
+
+    local Workspace = game:GetService("Workspace")
+    local Camera = Workspace.CurrentCamera
+    local StatusText = Drawing.new("Text")
+    StatusText.Position = Camera.ViewportSize / 2
+    StatusText.Center = true
+    StatusText.Outline = true
+    StatusText.Visible = true
+    StatusText.Size = 25
+    StatusText.Color = Color3.new(1, 1, 1)
+    StatusText.Text = "You are about to rejoin if the script does not execute you may reexecute it"
+    
+    task.wait(5)
+    StatusText:Remove()
 
     if queue_on_teleport then
         queue_on_teleport([=[
