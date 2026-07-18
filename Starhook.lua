@@ -27,20 +27,16 @@ if string.find(Executor, "wave") or string.find(Executor, "choco") then
     for _, Actor in ipairs(get_deleted_actors()) do 
         run_on_actor(Actor, ThreadSource) 
     end
-
 elseif string.find(Executor, "vo2lt") or string.find(Executor, "synapse") then
     for _, Actor in ipairs(getactors()) do 
         run_on_actor(Actor, ThreadSource) 
     end
-
 elseif string.find(Executor, "potassium") then
     for _, Actor in ipairs(getactorthreads()) do 
         run_on_thread(Actor, ThreadSource) 
     end
-
 elseif getfflag and string.lower(tostring(getfflag("DebugRunParallelLuaOnMainThread"))) == "true" then
     loadstring(Source)()
-
 elseif setfflag then
     setfflag("DebugRunParallelLuaOnMainThread", "True")
 
