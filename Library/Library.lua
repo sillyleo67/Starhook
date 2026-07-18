@@ -1,4 +1,3 @@
-
 local InputService = game:GetService('UserInputService');
 local TextService = game:GetService('TextService');
 local CoreGui = game:GetService('CoreGui');
@@ -1156,13 +1155,15 @@ do
             end;
 
             local State = KeyPicker:GetState();
+            local ToggleOn = ParentObj.Type ~= 'Toggle' or ParentObj.Value;
+            local Show = State and ToggleOn;
 
             ContainerLabel.Text = string.format('[%s] %s (%s)', KeyPicker.Value, Info.Text, KeyPicker.Mode);
 
-            ContainerLabel.Visible = State;
-            ContainerLabel.TextColor3 = State and Library.AccentColor or Library.FontColor;
+            ContainerLabel.Visible = Show;
+            ContainerLabel.TextColor3 = Show and Library.AccentColor or Library.FontColor;
 
-            Library.RegistryMap[ContainerLabel].Properties.TextColor3 = State and 'AccentColor' or 'FontColor';
+            Library.RegistryMap[ContainerLabel].Properties.TextColor3 = Show and 'AccentColor' or 'FontColor';
 
             local YSize = 0
             local XSize = 0
