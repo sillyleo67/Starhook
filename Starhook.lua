@@ -15,7 +15,7 @@ if string.find(Executor, "wave") or string.find(Executor, "choco") then
     for _, Actor in ipairs(get_deleted_actors()) do
         run_on_actor(Actor, ThreadSource)
     end
-elseif string.find(Executor, "volt") or string.find(Executor, "synapse") or string.find(Executor, "madium") then
+elseif string.find(Executor, "volt") or string.find(Executor, "synapse") then
     for _, Actor in ipairs(getactors()) do
         run_on_actor(Actor, ThreadSource)
     end
