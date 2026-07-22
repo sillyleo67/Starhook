@@ -1612,9 +1612,11 @@ do
             end
 
             if KeybindsToggle.Loaded then
+                local ParentActive = ParentObj.Value ~= false
+
                 KeybindsToggle:SetNormal(not ShowToggle)
 
-                KeybindsToggle:SetVisibility(State)
+                KeybindsToggle:SetVisibility(State and ParentActive)
                 KeybindsToggle:SetText(string.format("[%s] %s (%s)", tostring(KeyPicker.DisplayValue), Info.Text, KeyPicker.Mode))
                 KeybindsToggle:Display(State)
             end
@@ -4134,8 +4136,11 @@ do
             Toggle:Display()
 
             for _, Addon in next, Toggle.Addons do
-                if Addon.Type == "KeyPicker" and Addon.SyncToggleState then
-                    Addon.Toggled = Bool
+                if Addon.Type == "KeyPicker" then
+                    if Addon.SyncToggleState then
+                        Addon.Toggled = Bool
+                    end
+
                     Addon:Update()
                 end
             end
