@@ -399,6 +399,10 @@ local FetchIcons, Icons = pcall(function()
     ) :: () -> IconModule)()
 end)
 
+if FetchIcons and (typeof(Icons) ~= "table" or typeof(Icons.GetAsset) ~= "function") then
+    FetchIcons = false
+end
+
 function IsValidCustomIcon(Icon: string)
     return typeof(Icon) == "string"
         and (Icon:match("rbxasset") or Icon:match("roblox%.com/asset/%?id=") or Icon:match("rbxthumb://type="))
