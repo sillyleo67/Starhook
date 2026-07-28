@@ -1,6 +1,21 @@
-local Executor = string.lower(identifyexecutor and identifyexecutor() or "")
-local Source = [[getgenv().SCRIPT_KEY = "KEYLESS"; loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/680cb3160eb57826849c357d82cb511a6986ec128fa0c3abdec457870c918cac/download"))()]]
-local ThreadSource = [[local Shared = getrenv().shared if Shared and Shared.require then ]] .. Source .. [[ end]]
+-- This isn't my loader
+local ExecutorName = (identifyexecutor and identifyexecutor() or ""):lower()
+
+local Source = [[
+getgenv().SCRIPT_KEY = "KEYLESS"
+loadstring(game:HttpGet("https://api.jnkie.com/api/v1/luascripts/public/680cb3160eb57826849c357d82cb511a6986ec128fa0c3abdec457870c918cac/download"))()
+]]
+
+local ThreadSource = ([[local Shared = getrenv().shared if Shared and Shared.require then %s end]]):format(Source)
+
+local Executor = {
+    { "wave", get_deleted_actors, run_on_actor },
+    { "choco", get_deleted_actors, run_on_actor },
+    { "volt", getactors, run_on_actor },
+    { "synapse", getactors, run_on_actor },
+    { "potassium", getactorthreads, run_on_thread }--,
+    --{ "velocity", getactorthreads, run_on_thread }, -- velocity actors are trash
+}
 
 local function JoinServer()
     local Http = game:GetService("HttpService")
@@ -22,19 +37,20 @@ local function JoinServer()
     end
 end
 
-if string.find(Executor, "wave") or string.find(Executor, "choco") then
-    for _, Actor in ipairs(get_deleted_actors()) do 
-        run_on_actor(Actor, ThreadSource) 
+for _, Executors in ipairs(Executor) do
+    local Executor = Executors[1]
+    local GetActors = Executors[2]
+    local Execute = Executors[3]
+
+    if ExecutorName:find(Executor, 1, true) then
+        for _, Actor in ipairs(GetActors()) do
+            Execute(Actor, ThreadSource)
+        end
+        return
     end
-elseif string.find(Executor, "volt") or string.find(Executor, "synapse") then
-    for _, Actor in ipairs(getactors()) do 
-        run_on_actor(Actor, ThreadSource) 
-    end
-elseif string.find(Executor, "potassium") then
-    for _, Actor in ipairs(getactorthreads()) do 
-        run_on_thread(Actor, ThreadSource) 
-    end
-elseif getfflag and string.lower(tostring(getfflag("DebugRunParallelLuaOnMainThread"))) == "true" then
+end
+
+if getfflag and string.lower(tostring(getfflag("DebugRunParallelLuaOnMainThread"))) == "true" then
     loadstring(Source)()
 elseif setfflag then
     setfflag("DebugRunParallelLuaOnMainThread", "True")
@@ -61,4 +77,6 @@ elseif setfflag then
     end
 
     JoinServer()
+else
+    loadstring(Source)()
 end
