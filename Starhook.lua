@@ -75,7 +75,7 @@ elseif setfflag then
         ]=] .. Source)
     end
 
-    if string.find(game:GetService("Players").LocalPlayer.PlayerGui.ChatScreenGui.Main.TextVersion.ContentText, "-prod") then -- so dtc
+    if string.find(game:GetService("Players").LocalPlayer.PlayerGui.ChatScreenGui.Main.TextVersion.ContentText, "-prod") then -- we are detected with this one totally
         game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
     else
         JoinServer()
