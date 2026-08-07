@@ -18,7 +18,7 @@ local Executors = {
     { "potassium", getactorthreads, run_on_thread }
 }
 
-local function JoinServer() -- this is just for qt or ob servers cause you can't rejoin those servers
+local function JoinServer() -- this is just for qt or ob servers because you can't rejoin those servers
     local Url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?limit=100&excludeFullGames=true"
 
     local Success, Response = pcall(function()
