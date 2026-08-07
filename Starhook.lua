@@ -5,7 +5,7 @@ this loader was given to me by someone and was sightly edited by me for improvem
 local ExecutorName = (identifyexecutor and identifyexecutor() or ""):lower()
 
 local Source = [[
-loadstring(game:HttpGet("https://raw.githubusercontent.com/sillyleo67/Starhook/refs/heads/main/Scripts/StarhookPF.lua"))()
+loadstring(game:HttpGet("https://luaprot.net/api/v2/loaders/get/12653030483817460863"))()
 ]]
 
 local ThreadSource = ([[local Shared = getrenv().shared if Shared and Shared.require then %s end]]):format(Source)
