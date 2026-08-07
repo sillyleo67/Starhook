@@ -57,7 +57,6 @@ elseif setfflag then
     setfflag("DebugRunParallelLuaOnMainThread", "True")
 
     local StatusText = Drawing.new("Text")
-
     StatusText.Position = game:GetService("Workspace").CurrentCamera.ViewportSize / 2
     StatusText.Center = true
     StatusText.Outline = true
