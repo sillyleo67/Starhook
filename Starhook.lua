@@ -20,7 +20,7 @@ local Executors = {
     { "potassium", getactorthreads, run_on_thread }
 }
 
-local function JoinServer() -- this is just for qt or ob servers because you can't rejoin those servers
+local function JoinServer()
     local Url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?limit=100&excludeFullGames=true"
 
     local Success, Response = pcall(function()
@@ -46,6 +46,14 @@ for _, Executor in ipairs(Executors) do
 
     if ExecutorName:find(Name, 1, true) then
         local Actors = GetActors()
+
+        if Name == "synapse" or Name == "choco" then
+            for i = 1, #Actors do
+                RunFunction(Actors[i], Source)
+            end
+            return
+        end
+
         local Found = false
 
         for i = 1, #Actors do
@@ -54,27 +62,35 @@ for _, Executor in ipairs(Executors) do
             end
 
             local Actor = Actors[i]
-            local Index, Channel = create_comm_channel()
+            local Index, Channel
 
-            Channel.Event:Once(function()
-                if Found then
-                    return
-                end
+            if Name == "wave" and actor.createcommchannel then
+                Index, Channel = actor.createcommchannel()
+            elseif create_comm_channel then
+                Index, Channel = create_comm_channel()
+            end
 
-                RunFunction(Actor, Source)
-                Found = true
-            end)
+            if Channel then
+                Channel.Event:Once(function()
+                    if Found then
+                        return
+                    end
 
-            RunFunction(Actor, [=[
-                local Channel = get_comm_channel(...)
+                    RunFunction(Actor, Source)
+                    Found = true
+                end)
 
-                local Shared = getrenv().shared
-                local Require = Shared and Shared.require
+                RunFunction(Actor, [=[
+                    local Channel = get_comm_channel(...)
 
-                if Require then
-                    Channel:Fire()
-                end
-            ]=], Index)
+                    local Shared = getrenv().shared
+                    local Require = Shared and Shared.require
+
+                    if Require then
+                        Channel:Fire()
+                    end
+                ]=], Index)
+            end
         end
 
         return
@@ -105,7 +121,7 @@ elseif setfflag then
         ]=] .. Source)
     end
 
-    if string.find(game:GetService("Players").LocalPlayer.PlayerGui.ChatScreenGui.Main.TextVersion.ContentText, "-prod") then -- we are detected with this one totally
+    if string.find(game:GetService("Players").LocalPlayer.PlayerGui.ChatScreenGui.Main.TextVersion.ContentText, "-prod") then
         game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
     else
         JoinServer()
