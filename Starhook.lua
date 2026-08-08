@@ -46,7 +46,7 @@ for _, Executor in ipairs(Executors) do
 
     if ExecutorName:find(Name, 1, true) then
         if not Name or not GetActors or not RunFunction then
-            game:GetService("Players").LocalPlayer:Kick("report this in the discord server")
+            game:GetService("Players").LocalPlayer:Kick("Report this in the discord server.")
         end
 
         local Actors = GetActors()
