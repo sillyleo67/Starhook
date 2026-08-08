@@ -1,5 +1,5 @@
 --[[
-this loader was given to me by someone and was sightly edited by me for improvements
+this loader was given to me by someone and was edited by me for improvements
 ]]--
 
 if not game:IsLoaded() then
