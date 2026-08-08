@@ -8,8 +8,6 @@ local Source = [[
 loadstring(game:HttpGet("https://raw.githubusercontent.com/sillyleo67/Starhook/refs/heads/main/Scripts/StarhookPF.lua"))()
 ]]
 
-local ThreadSource = ([[local Shared = getrenv().shared if Shared and Shared.require then %s end]]):format(Source)
-
 local Executors = {
     { "wave", get_deleted_actors, run_on_actor },
     { "choco", get_deleted_actors, run_on_actor },
@@ -40,11 +38,39 @@ end
 for _, Executor in ipairs(Executors) do
     local Name = Executor[1]
     local GetActors = Executor[2]
-    local Execute = Executor[3]
+    local RunFunction = Executor[3]
 
     if ExecutorName:find(Name, 1, true) then
-        for _, Actor in ipairs(GetActors()) do
-            Execute(Actor, ThreadSource)
+        local Actors = GetActors()
+        local Found = false
+
+        for i = 1, #Actors do
+            if Found then
+                break
+            end
+
+            local Actor = Actors[i]
+            local Index, Channel = create_comm_channel()
+
+            Channel.Event:Once(function()
+                if Found then
+                    return
+                end
+
+                RunFunction(Actor, Source)
+                Found = true
+            end)
+
+            RunFunction(Actor, [=[
+                local Channel = get_comm_channel(...)
+
+                local Shared = getrenv().shared
+                local Require = Shared and Shared.require
+
+                if Require then
+                    Channel:Fire()
+                end
+            ]=], Index)
         end
 
         return
