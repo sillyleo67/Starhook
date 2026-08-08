@@ -2,6 +2,10 @@
 this loader was given to me by someone and was sightly edited by me for improvements
 ]]--
 
+if not game:IsLoaded() then
+    game.Loaded:Wait()
+end
+
 local ExecutorName = (identifyexecutor and identifyexecutor() or ""):lower()
 
 local Source = [[
