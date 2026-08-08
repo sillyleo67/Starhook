@@ -68,8 +68,8 @@ for _, Executor in ipairs(Executors) do
             local Actor = Actors[i]
             local Index, Channel
 
-            if Name == "wave" and actor.createcommchannel then
-                Index, Channel = actor.createcommchannel()
+            if Name == "wave" and Actor.createcommchannel then
+                Index, Channel = Actor.createcommchannel()
             elseif create_comm_channel then
                 Index, Channel = create_comm_channel()
             end
