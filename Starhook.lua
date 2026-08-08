@@ -20,7 +20,7 @@ local Executors = {
     { "potassium", getactorthreads, run_on_thread }
 }
 
-local function JoinServer()
+local function JoinServer() -- erm we do this for qt and ob servers because you can't rejoin them :D
     local Url = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?limit=100&excludeFullGames=true"
 
     local Success, Response = pcall(function()
@@ -121,7 +121,7 @@ elseif setfflag then
         ]=] .. Source)
     end
 
-    if string.find(game:GetService("Players").LocalPlayer.PlayerGui.ChatScreenGui.Main.TextVersion.ContentText, "-prod") then
+    if string.find(game:GetService("Players").LocalPlayer.PlayerGui.ChatScreenGui.Main.TextVersion.ContentText, "-prod") then -- no detection pls
         game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
     else
         JoinServer()
