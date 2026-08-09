@@ -68,7 +68,7 @@ for _, Executor in ipairs(Executors) do
             local Actor = Actors[i]
             local Index, Channel
 
-            if Name == "wave" and actor.createcommchannel then
+            if Name == "wave" and actor and actor.createcommchannel then
                 Index, Channel = actor.createcommchannel()
             elseif create_comm_channel then
                 Index, Channel = create_comm_channel()
@@ -85,7 +85,7 @@ for _, Executor in ipairs(Executors) do
                 end)
 
                 RunFunction(Actor, [=[
-                    local Channel = actor.getcommchannel(...) or get_comm_channel(...)
+                    local Channel = (actor and actor.getcommchannel and actor.getcommchannel(...)) or get_comm_channel(...)
 
                     local Shared = getrenv().shared
                     local Require = Shared and Shared.require
