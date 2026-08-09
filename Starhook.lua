@@ -68,8 +68,8 @@ for _, Executor in ipairs(Executors) do
             local Actor = Actors[i]
             local Index, Channel
 
-            if Name == "wave" and Actor.createcommchannel then
-                Index, Channel = Actor.createcommchannel()
+            if Name == "wave" and actor.createcommchannel then
+                Index, Channel = actor.createcommchannel()
             elseif create_comm_channel then
                 Index, Channel = create_comm_channel()
             end
@@ -85,7 +85,7 @@ for _, Executor in ipairs(Executors) do
                 end)
 
                 RunFunction(Actor, [=[
-                    local Channel = get_comm_channel(...)
+                    local Channel = actor.getcommchannel and actor.getcommchannel(...) or get_comm_channel(...)
 
                     local Shared = getrenv().shared
                     local Require = Shared and Shared.require
@@ -114,7 +114,6 @@ elseif setfflag then
     StatusText.Size = 25
     StatusText.Color = Color3.new(1, 1, 1)
     StatusText.Text = "You are about to rejoin. If the script does not execute, reexecute it."
-
     task.wait(5)
     StatusText:Remove()
 
