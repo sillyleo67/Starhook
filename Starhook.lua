@@ -13,7 +13,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/sillyleo67/Starhook/r
 ]]
 
 local Executors = {
-    { "wave", get_deleted_actors, run_on_actor },
     { "choco", get_deleted_actors, run_on_actor },
     { "volt", getactors, run_on_actor },
     { "synapse", getactors, run_on_actor },
@@ -68,9 +67,7 @@ for _, Executor in ipairs(Executors) do
             local Actor = Actors[i]
             local Index, Channel
 
-            if Name == "wave" and actor and actor.createcommchannel then
-                Index, Channel = actor.createcommchannel()
-            elseif create_comm_channel then
+            if create_comm_channel then
                 Index, Channel = create_comm_channel()
             end
 
@@ -85,7 +82,7 @@ for _, Executor in ipairs(Executors) do
                 end)
 
                 RunFunction(Actor, [=[
-                    local Channel = (actor and actor.getcommchannel and actor.getcommchannel(...)) or get_comm_channel(...)
+                    local Channel = get_comm_channel(...)
 
                     local Shared = getrenv().shared
                     local Require = Shared and Shared.require
