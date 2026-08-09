@@ -85,7 +85,7 @@ for _, Executor in ipairs(Executors) do
                 end)
 
                 RunFunction(Actor, [=[
-                    local Channel = actor.getcommchannel and actor.getcommchannel(...) or get_comm_channel(...)
+                    local Channel = actor.getcommchannel(...) or get_comm_channel(...)
 
                     local Shared = getrenv().shared
                     local Require = Shared and Shared.require
