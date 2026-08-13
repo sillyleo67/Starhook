@@ -6778,6 +6778,7 @@ do
         local function SelectPlayer(Player)
             local Previous = Selected
             Selected = Player
+            Library.SelectedPlayer = Player
 
             if Previous then
                 UpdateRow(Previous)
@@ -6798,6 +6799,7 @@ do
 
             if Selected == Player then
                 Selected = nil
+                Library.SelectedPlayer = nil
                 Icon.Image = ""
                 InfoLabel.Text = "Select a player."
             end
