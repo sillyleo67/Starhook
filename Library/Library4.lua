@@ -1,3 +1,16 @@
+-- this isn't my
+
+
+
+
+
+
+
+
+
+
+
+
 local cloneref = (cloneref or clonereference or function(instance: any)
 	return instance
 end)
@@ -6781,7 +6794,7 @@ do
                 return Color3.fromRGB(0, 255, 0)
             end
 
-            return Color3.fromRGB(150, 150, 150)
+            return Color3.new(1, 1, 1)
         end
 
         local function GetStatusText(Player)
